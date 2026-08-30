@@ -29,22 +29,51 @@ function updateTimer() {
     }
 }
 
-// Generate Ambient Falling Petals
+// Spawns petals with randomized paths, natural sways, and distributed starting points
 function initPetals() {
     const container = document.getElementById("petals");
-    const count = 18;
+    const count = 14;
+
+    const lightPinkThemes = [
+        "radial-gradient(circle, #ffeef1 25%, #f6bcc5 90%)",
+        "radial-gradient(circle, #fde2e7 25%, #f3b0bb 90%)",
+        "radial-gradient(circle, #fae6e9 30%, #eea3af 85%)",
+        "radial-gradient(circle, #ffffff 10%, #f9cbd3 85%)"
+    ];
 
     for (let i = 0; i < count; i++) {
         const petal = document.createElement("div");
         petal.className = "petal";
-        
-        const size = 10 + Math.random() * 12;
+
+        // Balanced sizing (11px to 18px)
+        const size = 11 + Math.random() * 7;
         petal.style.width = size + "px";
-        petal.style.height = (size * 1.3) + "px";
-        petal.style.left = (Math.random() * 100) + "%";
-        petal.style.animationDuration = (7 + Math.random() * 6) + "s";
-        petal.style.animationDelay = (Math.random() * 7) + "s";
-        
+        petal.style.height = (size * 1.35) + "px";
+
+        // Even distribution across screen width to avoid clustering
+        const sectionWidth = 100 / count;
+        const leftPos = (i * sectionWidth) + (Math.random() * (sectionWidth * 0.8));
+        petal.style.left = leftPos + "vw";
+
+        petal.style.background = lightPinkThemes[Math.floor(Math.random() * lightPinkThemes.length)];
+
+        // Dynamic, randomized left-right sways and wind drift
+        const sway1 = (Math.random() * 60 - 30) + "px";
+        const sway2 = (Math.random() * 70 - 35) + "px";
+        const sway3 = (Math.random() * 60 - 30) + "px";
+        const driftEnd = (Math.random() * 80 - 40) + "px";
+
+        petal.style.setProperty("--sway-1", sway1);
+        petal.style.setProperty("--sway-2", sway2);
+        petal.style.setProperty("--sway-3", sway3);
+        petal.style.setProperty("--drift-end", driftEnd);
+
+        // Natural floating speeds (8s to 14s)
+        petal.style.animationDuration = (8 + Math.random() * 6) + "s";
+
+        // Negative delay ensures petals are already drifting when page opens
+        petal.style.animationDelay = (-Math.random() * 12) + "s";
+
         container.appendChild(petal);
     }
 }
